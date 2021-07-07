@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express"
 import { Group } from "../entity/group.entity"
 import { GroupStudent } from "../entity/group-student.entity"
+import { Student } from "../entity/student.entity"
+import { StudentRollState } from "../entity/student-roll-state.entity"
 import { getRepository } from "typeorm"
 import { CreateGroupInput, UpdateGroupInput } from "../interface/group.interface"
 
@@ -10,6 +12,8 @@ export class GroupController {
 
   private groupRepository = getRepository(Group)
   private groupStudentRepository = getRepository(GroupStudent)
+  private studentRollStateRepository = getRepository(StudentRollState)
+  private studentRepository = getRepository(Student)
 
   async allGroups(request: Request, response: Response, next: NextFunction) {
     return this.groupRepository.find()
@@ -74,6 +78,11 @@ export class GroupController {
     await this.groupStudentRepository.remove(studentGroupToRemove)
 
     // 2. For each group, query the student rolls to see which students match the filter for the group
+   
+    // I will query all group here using this.groupRepository.find()
+    // Query All students with their roll states using join query between student and student-roll table
+    // Match if student and student roll data matches filter
+    // add student to group.
 
     // 3. Add the list of students that match the filter to the group
   }
